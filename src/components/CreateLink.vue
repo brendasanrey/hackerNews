@@ -9,7 +9,8 @@
 </template>
 
 <script>
-import { CREATE_LINK } from '../constants/graphql';
+import { GC_USER_ID } from '../constants/settings';
+import { CREATE_LINK, ALL_LINKS } from '../constants/graphql';
 
 export default {
   name: 'CreateLink',
@@ -21,14 +22,40 @@ export default {
   },
   methods: {
     createLink() {
-      const { description, url } = this.$data;
-      this.$apollo.mutate({
-        mutation: CREATE_LINK,
-        variables: {
-          description,
-          url,
-        },
-      });
+      const postedById = localStorage.getItem(GC_USER_ID);
+      if (!postedById) {
+        console.error('No user logged in');
+        return;
+      }
+
+      const newDescription = this.description;
+      const newUrl = this.url;
+      this.description = '';
+      this.url = '';
+      this.$apollo
+        .mutate({
+          mutation: CREATE_LINK,
+          variables: {
+            description: newDescription,
+            url: newUrl,
+            postedById,
+          },
+          update: (store, { data: { createLink } }) => {
+            const data = store.readQuery({
+              query: ALL_LINKS,
+            });
+            data.allLinks.push(createLink);
+            store.writeQuery({ query: ALL_LINKS, data });
+          },
+        })
+        .then(() => {
+          this.$router.push({ path: '/' });
+        })
+        .catch((error) => {
+          console.error(error);
+          this.newDescription = newDescription;
+          this.newUrl = newUrl;
+        });
     },
   },
 };

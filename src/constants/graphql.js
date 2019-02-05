@@ -13,12 +13,60 @@ export const ALL_LINKS = gql`
 `;
 
 export const CREATE_LINK = gql`
-  mutation CreateLink($description: String!, $url: String!) {
-    createLink(description: $description, url: $url) {
+  mutation CreateLink($description: String!, $url: String!, $postedById: ID!) {
+    createLink(
+      description: $description,
+      url: $url,
+      postedById: $postedById
+    ) {
       id
       createdAt
       url
       description
+      postedBy {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export const CREATE_USER = gql`
+  mutation CreateUser($name: String!, $email: String!, $password: String!) {
+    createUser(
+      name: $name,
+      authProvider: {
+        email: {
+          email: $email,
+          password: $password
+        }
+      }
+    ) {
+      id
+    }
+
+    signinUser(email: {
+      email: $email,
+      password: $password
+    }) {
+      token
+      user {
+        id
+      }
+    }
+  }
+`;
+
+export const SIGNIN_USER = gql`
+  mutation SigninUser($email: String!, $password: String!) {
+    signinUser(email: {
+      email: $email,
+      password: $password
+    }) {
+      token
+      user {
+        id
+      }
     }
   }
 `;
