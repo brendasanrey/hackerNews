@@ -1,32 +1,29 @@
 <template>
   <div>
-    <link-item v-for="link in allLinks" :key='link.id' :link="link"></link-item>
+    <h4 v-if="loading">Loading...</h4>
+    <link-item v-for="link in allLinks" :key="link.id" :link="link"></link-item>
   </div>
 </template>
 
 <script>
-import LinkItem from './LinkItem'
-  ;
+import { ALL_LINKS } from '../constants/graphql';
+import LinkItem from './LinkItem';
 
 export default {
   name: 'LinkList',
   data() {
     return {
-      allLinks: [
-        {
-          id: '1',
-          description: 'The Coolest GraphQL Backend 😎',
-          url: 'https://www.graph.cool',
-        }, {
-          id: '2',
-          description: 'The Best GraphQL Client',
-          url: 'http://dev.apollodata.com/',
-        },
-      ],
+      allLinks: [],
+      loading: 0,
     };
   },
   components: {
     LinkItem,
+  },
+  apollo: {
+    allLinks: {
+      query: ALL_LINKS,
+    },
   },
 };
 </script>

@@ -6,7 +6,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import VueApollo from 'vue-apollo';
 import Vue from 'vue';
 import App from './App';
-// import router from './router';
+import router from './router';
 
 Vue.config.productionTip = false;
 
@@ -34,7 +34,7 @@ const apolloProvider = new VueApollo({
 new Vue({
   el: '#app',
   apolloProvider,
-  // router,
+  router,
   render: h => h(App),
 
 });
