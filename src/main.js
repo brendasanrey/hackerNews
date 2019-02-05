@@ -6,21 +6,22 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import VueApollo from 'vue-apollo';
 import Vue from 'vue';
 import App from './App';
-import router from './router';
+// import router from './router';
 
 Vue.config.productionTip = false;
 
 const httpLink = new HttpLink({
   uri: 'https://api.graph.cool/simple/v1/cjrs4cjkl78kh01350w75rh83',
 });
+const cache = new InMemoryCache();
 
 const apolloClient = new ApolloClient({
   link: httpLink,
-  cache: new InMemoryCache(),
+  cache,
   connectToDevTools: true,
 });
 
-Vue.use(ApolloClient);
+Vue.use(VueApollo);
 
 const apolloProvider = new VueApollo({
   defaultClient: apolloClient,
@@ -32,8 +33,8 @@ const apolloProvider = new VueApollo({
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  provide: apolloProvider.provide(),
-  router,
+  apolloProvider,
+  // router,
   render: h => h(App),
 
 });
