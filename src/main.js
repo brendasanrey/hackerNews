@@ -4,6 +4,7 @@ import { ApolloClient } from 'apollo-client';
 import { HttpLink } from 'apollo-link-http';
 import VueApollo from 'vue-apollo';
 import Vue from 'vue';
+import { SubscriptionClient, addGraphQLSubscriptions } from 'subscriptions-transport-ws';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloLink } from 'apollo-link';
 import { GC_USER_ID, GC_AUTH_TOKEN } from './constants/settings';
@@ -16,7 +17,16 @@ const userId = localStorage.getItem(GC_USER_ID);
 const httpLink = new HttpLink({
   uri: 'https://api.graph.cool/simple/v1/cjrs4cjkl78kh01350w75rh83',
 });
+
+const wsClient = new SubscriptionClient('wss://subscriptions.graph.cool/v1/cjrs4cjkl78kh01350w75rh83', {
+  reconnect: true,
+  connectionParams: {
+    authToken: localStorage.getItem(GC_AUTH_TOKEN),
+  },
+});
+
 const cache = new InMemoryCache();
+
 const authMiddleware = new ApolloLink((operation, forward) => {
   // add the authorization to the headers
   const token = localStorage.getItem(GC_AUTH_TOKEN);
@@ -29,8 +39,14 @@ const authMiddleware = new ApolloLink((operation, forward) => {
   return forward(operation);
 });
 
+const httpLinkWithSubscriptions = addGraphQLSubscriptions(
+  authMiddleware.concat(httpLink),
+  wsClient,
+);
+
+
 const apolloClient = new ApolloClient({
-  link: authMiddleware.concat(httpLink),
+  link: httpLinkWithSubscriptions,
   cache,
   connectToDevTools: true,
 });

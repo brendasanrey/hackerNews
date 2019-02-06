@@ -12,6 +12,14 @@ export default new Router({
   routes: [
     {
       path: '/',
+      redirect: '/new/1',
+    },
+    {
+      path: '/new/:page',
+      component: LinkList,
+    },
+    {
+      path: '/top',
       component: LinkList,
     },
     {
