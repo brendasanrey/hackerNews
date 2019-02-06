@@ -3,11 +3,21 @@ import gql from 'graphql-tag';
 
 export const ALL_LINKS = gql`
   query AllLinksQuery {
-    allLinks {
+     allLinks {
       id
       createdAt
       url
       description
+      postedBy {
+        id
+        name
+      }
+      votes {
+        id
+        user {
+          id
+        }
+      }
     }
   }
 `;
@@ -64,6 +74,25 @@ export const SIGNIN_USER = gql`
       password: $password
     }) {
       token
+      user {
+        id
+      }
+    }
+  }
+`;
+
+export const CREATE_VOTE = gql`
+  mutation CreateVote($userId: ID!, $linkId: ID!) {
+    createVote(userId: $userId, linkId: $linkId) {
+      id
+      link {
+        votes {
+          id
+          user {
+            id
+          }
+        }
+      }
       user {
         id
       }
