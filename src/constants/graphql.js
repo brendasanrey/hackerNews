@@ -99,3 +99,30 @@ export const CREATE_VOTE = gql`
     }
   }
 `;
+
+export const ALL_LINKS_SEARCH = gql`
+  query AllLinksSearch($searchText: String!) {
+    allLinks(filter: {
+      OR: [{
+        url_contains: $searchText
+      }, {
+        description_contains: $searchText
+      }]
+    }) {
+      id
+      url
+      description
+      createdAt
+      postedBy {
+        id
+        name
+      }
+      votes {
+        id
+        user {
+          id
+        }
+      }
+    }
+  }
+`;

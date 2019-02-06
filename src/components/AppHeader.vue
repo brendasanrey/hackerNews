@@ -4,7 +4,9 @@
       <div class="fw7 mr1">Hacker News</div>
       <router-link to="/" class="ml1 no-underline black">New</router-link>
       <div class="ml1">|</div>
-      <router-link to="/create" class="ml1 no-uderline black">Submit</router-link>
+      <router-link to="/search" class="ml1 no-underline black">search</router-link>
+      <div class="ml1">|</div>
+      <router-link to="/create" class="ml1 no-underline black">Submit</router-link>
     </div>
     <div class="flex flex-fixed">
       <div v-if="userId" class="ml1 pointer black" @click="logout()">logout</div>
