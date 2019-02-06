@@ -1,6 +1,7 @@
-# hackernews
+# Hackernews
 
-> A Vue.js project
+> A simple clone of [Hackernews](https://news.ycombinator.com/news). 
+> The final product can be viewed [here](perfect-answer.surge.sh).
 
 ## Build Setup
 
